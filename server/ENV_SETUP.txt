@@ -1,0 +1,23 @@
+Crie um arquivo .env neste diretório (server/) com o seguinte conteúdo:
+
+# Servidor
+PORT=3001
+FRONTEND_URL=http://localhost:3000
+
+# Gemini API
+GEMINI_API_KEY=sua_chave_gemini_aqui
+
+# Supabase
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=sua_service_role_key_aqui
+
+# Stripe
+STRIPE_SECRET_KEY=sk_test_sua_chave_secreta
+STRIPE_WEBHOOK_SECRET=whsec_seu_webhook_secret
+STRIPE_PRICE_STARTER=price_starter_id
+STRIPE_PRICE_PREMIUM=price_premium_id
+
+Para obter as chaves:
+- Gemini: https://makersuite.google.com/app/apikey
+- Supabase: https://app.supabase.com (Settings > API)
+- Stripe: https://dashboard.stripe.com (API keys e Products)
