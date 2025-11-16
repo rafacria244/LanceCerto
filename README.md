@@ -4,131 +4,190 @@
 
 Plataforma web completa que ajuda freelancers a gerar propostas comerciais personalizadas com inteligência artificial em segundos.
 
+[![CI/CD Pipeline](https://github.com/rafacria244/LanceCerto/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/rafacria244/LanceCerto/actions/workflows/ci-cd.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## 📋 Sobre o Projeto
 
 O LanceCerto é um Micro-SaaS que reduz o tempo que freelancers gastam escrevendo propostas de **30 minutos para 30 segundos** e aumenta suas taxas de conversão em **5x**.
 
-### Funcionalidades
+### ✨ Funcionalidades
 
+#### Core
 - ✅ Landing page moderna e de alta conversão
 - ✅ Geração de propostas personalizadas com IA (Gemini 2.5 Flash)
 - ✅ Sistema de autenticação com Supabase (Google OAuth)
 - ✅ Planos de assinatura (Free, Starter, Premium)
 - ✅ Integração completa com Stripe para pagamentos
 - ✅ Histórico de propostas salvo no Supabase
-- ✅ Limites de uso baseados no plano
 - ✅ Interface limpa, intuitiva e responsiva
+
+#### Segurança e Performance
+- 🔒 Rate limiting para prevenir abuso
+- 🔒 Validação de input robusta
+- 🔒 Helmet.js para headers de segurança
+- 🔒 Row Level Security (RLS) no Supabase
+- 📊 Sistema de logging com Winston
+- 📊 Dashboard com métricas de uso
+
+#### DevOps
+- 🐳 Dockerizado (cliente e servidor)
+- 🔄 CI/CD com GitHub Actions
+- 🧪 Testes automatizados (Jest + Vitest)
+- 📝 Documentação completa de deploy
 
 ## 🛠️ Tecnologias
 
-- **Frontend**: React + Vite + TailwindCSS + React Router
-- **Backend**: Node.js + Express
-- **IA**: Google Gemini 2.5 Flash
-- **Autenticação**: Supabase Auth
-- **Banco de Dados**: Supabase (PostgreSQL)
-- **Pagamentos**: Stripe
-- **Deploy**: Vercel (frontend) + Render/Railway (backend)
+### Frontend
+- React 18 + Vite
+- TailwindCSS
+- React Router DOM
+- Axios
+- Supabase Auth
+
+### Backend
+- Node.js + Express
+- Google Gemini 2.5 Flash
+- Supabase (PostgreSQL)
+- Stripe
+- Winston (logging)
+- Helmet (segurança)
+- Express Rate Limit
+- Express Validator
+
+### DevOps
+- Docker + Docker Compose
+- GitHub Actions
+- Jest (testes backend)
+- Vitest (testes frontend)
 
 ## 📦 Instalação
 
 ### Pré-requisitos
 
-- Node.js 18+ instalado
+- Node.js 18+
+- Docker (opcional, mas recomendado)
 - Conta no Google AI Studio (Gemini API)
 - Projeto no Supabase
 - Conta no Stripe
 
 ### Passos
 
-1. **Clone o repositório** (ou baixe os arquivos)
+1. **Clone o repositório**
 
-2. **Instale as dependências**:
-   ```bash
-   npm run install:all
-   ```
+```bash
+git clone https://github.com/rafacria244/LanceCerto.git
+cd LanceCerto
+```
 
-3. **Configure o Supabase**:
-   
-   - Crie um projeto em https://app.supabase.com
-   - Execute o SQL em `server/supabase-schema.sql` no SQL Editor do Supabase
-   - Configure Google OAuth em Authentication > Providers
-   - Copie a URL e Anon Key
+2. **Instale as dependências**
 
-4. **Configure as variáveis de ambiente**:
+```bash
+npm run install:all
+```
 
-   **Frontend (`client/.env`)**:
-   ```env
-   VITE_SUPABASE_URL=https://seu-projeto.supabase.co
-   VITE_SUPABASE_ANON_KEY=sua_anon_key
-   VITE_STRIPE_PUBLISHABLE_KEY=pk_test_sua_chave
-   VITE_STRIPE_PRICE_STARTER=price_starter_id
-   VITE_STRIPE_PRICE_PREMIUM=price_premium_id
-   ```
+3. **Configure as variáveis de ambiente**
 
-   **Backend (`server/.env`)**:
-   ```env
-   PORT=3001
-   FRONTEND_URL=http://localhost:3000
-   GEMINI_API_KEY=sua_chave_gemini
-   SUPABASE_URL=https://seu-projeto.supabase.co
-   SUPABASE_SERVICE_ROLE_KEY=sua_service_role_key
-   STRIPE_SECRET_KEY=sk_test_sua_chave_secreta
-   STRIPE_WEBHOOK_SECRET=whsec_seu_webhook_secret
-   STRIPE_PRICE_STARTER=price_starter_id
-   STRIPE_PRICE_PREMIUM=price_premium_id
-   ```
+```bash
+# Backend
+cp server/.env.example server/.env
+nano server/.env
 
-5. **Configure o Stripe**:
-   
-   - Crie produtos no Stripe Dashboard
-   - Crie preços recorrentes (mensais) para Starter e Premium
-   - Configure webhook em Developers > Webhooks
-   - URL do webhook: `https://seu-backend.com/api/webhook`
-   - Eventos: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
+# Frontend
+cp client/.env.example client/.env
+nano client/.env
+```
 
-6. **Execute o projeto**:
-   ```bash
-   npm run dev
-   ```
-   
-   Isso iniciará:
-   - Frontend em `http://localhost:3000`
-   - Backend em `http://localhost:3001`
+Veja [GUIA_CONFIGURACAO.md](GUIA_CONFIGURACAO.md) para detalhes sobre cada variável.
+
+4. **Configure o Supabase**
+
+Execute o SQL em `server/supabase-schema.sql` no SQL Editor do Supabase.
+
+5. **Execute o projeto**
+
+**Com Docker (recomendado):**
+```bash
+docker-compose up --build
+```
+
+**Sem Docker:**
+```bash
+npm run dev
+```
+
+Acesse:
+- Frontend: http://localhost:3000
+- Backend: http://localhost:3001
+
+## 🧪 Testes
+
+### Backend
+
+```bash
+cd server
+npm test                # Executar testes
+npm run test:watch      # Modo watch
+npm run test:coverage   # Cobertura de testes
+```
+
+### Frontend
+
+```bash
+cd client
+npm test                # Executar testes
+npm run test:ui         # Interface visual
+npm run test:coverage   # Cobertura de testes
+```
 
 ## 🚀 Deploy
 
-### Frontend (Vercel)
+Veja o guia completo em [DEPLOY.md](DEPLOY.md).
 
-1. Conecte seu repositório na Vercel
-2. Configure as variáveis de ambiente
-3. Build Command: `cd client && npm install && npm run build`
-4. Output Directory: `client/dist`
+### Resumo Rápido
 
-### Backend (Render/Railway)
+**Frontend (Vercel):**
+1. Conecte o repositório na Vercel
+2. Configure variáveis de ambiente
+3. Deploy automático a cada push
 
-1. Conecte seu repositório
-2. Configure:
-   - Build Command: `cd server && npm install`
-   - Start Command: `cd server && npm start`
-3. Adicione todas as variáveis de ambiente
-4. Configure o webhook do Stripe apontando para sua URL
+**Backend (Render/Railway):**
+1. Conecte o repositório
+2. Configure variáveis de ambiente
+3. Deploy automático a cada push
 
 ## 📝 Estrutura do Projeto
 
 ```
 LanceCerto/
-├── client/                 # Frontend React
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml           # Pipeline CI/CD
+├── client/                      # Frontend React
 │   ├── src/
-│   │   ├── components/    # Componentes React
-│   │   ├── pages/          # Páginas (Home, Generate, Login)
-│   │   ├── contexts/       # Context API (Auth)
-│   │   └── lib/            # Bibliotecas (Supabase)
-│   └── package.json
-├── server/                 # Backend Node.js
-│   ├── routes/             # Rotas (Stripe)
-│   ├── index.js            # Servidor principal
-│   └── supabase-schema.sql # Schema do banco
-└── package.json
+│   │   ├── components/         # Componentes React
+│   │   ├── pages/              # Páginas
+│   │   ├── contexts/           # Context API
+│   │   └── lib/                # Bibliotecas
+│   ├── Dockerfile              # Docker do frontend
+│   └── nginx.conf              # Configuração Nginx
+├── server/                      # Backend Node.js
+│   ├── routes/                 # Rotas da API
+│   │   ├── stripe.js
+│   │   ├── export.js
+│   │   └── premium.js
+│   ├── middleware/             # Middlewares
+│   │   ├── rateLimiter.js
+│   │   ├── validation.js
+│   │   └── requestLogger.js
+│   ├── config/                 # Configurações
+│   │   └── logger.js
+│   ├── __tests__/              # Testes
+│   ├── Dockerfile              # Docker do backend
+│   └── index.js                # Servidor principal
+├── docker-compose.yml          # Orquestração Docker
+├── DEPLOY.md                   # Guia de deploy
+└── README.md                   # Este arquivo
 ```
 
 ## 🎨 Planos
@@ -150,35 +209,56 @@ LanceCerto/
 - Geração automática de cronogramas
 - Suporte prioritário
 
-## 📄 Licença
+## 🔒 Segurança
 
-MIT
+- ✅ Row Level Security (RLS) no Supabase
+- ✅ Helmet.js para headers HTTP seguros
+- ✅ Rate limiting em endpoints críticos
+- ✅ Validação de input com express-validator
+- ✅ Secrets nunca commitados (`.env` no `.gitignore`)
+- ✅ CORS configurado corretamente
+- ✅ Webhook do Stripe com validação de assinatura
+
+## 📊 Monitoramento
+
+- Logs estruturados com Winston
+- Logs de erro separados
+- Logs de requisições HTTP
+- Métricas de uso por plano
+- Health check endpoint (`/api/health`)
 
 ## 🤝 Contribuindo
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
+Contribuições são bem-vindas! Para contribuir:
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+### Executando Testes Antes de Contribuir
+
+```bash
+# Backend
+cd server && npm test
+
+# Frontend
+cd client && npm test
+```
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 📞 Suporte
+
+- 📧 Email: suporte@lancecerto.ai
+- 🐛 Issues: [GitHub Issues](https://github.com/rafacria244/LanceCerto/issues)
+- 📖 Documentação: [Wiki](https://github.com/rafacria244/LanceCerto/wiki)
 
 ---
 
 Desenvolvido com ❤️ para freelancers
 
-## 📦 Publicando no GitHub (guia rápido)
-
-1. Crie um repositório no GitHub com o nome `Rafael` no usuário `Faelzin09663` (ou use `gh`):
-
-```powershell
-gh repo create Faelzin09663/Rafael --public --source=. --remote=origin --push
-```
-
-2. Se preferir criar pelo site, crie o repo e use `git remote add origin` como no passo abaixo.
-
-3. Alternativamente, use o script de ajuda incluído para configurar remote e fazer o primeiro push:
-
-```powershell
-cd \path\to\repo
-.\scripts\publish-to-github.ps1 -RepoOwner "Faelzin09663" -RepoName "Rafael"
-```
-
-4. O repositório é criado e o `main` receberá o código; o workflow de CI (`.github/workflows/node-ci.yml`) fará build do client e instalará dependências nas PRs.
-
-> Observação: para autenticar, você pode usar um Personal Access Token (PAT) ou SSH. Veja `CORRIGIR_GIT_AUTH.md` e `configurar-git.ps1` para instruções detalhadas.
+**Status do Projeto:** ✅ Pronto para Produção

@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import ProposalForm from '../components/ProposalForm';
 import ResultCard from '../components/ResultCard';
 import SubscriptionInfo from '../components/SubscriptionInfo';
+import Dashboard from '../components/Dashboard';
 
 function Generate() {
   const { user } = useAuth();
@@ -38,7 +39,10 @@ function Generate() {
       <Header />
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         <h1 className="text-3xl font-bold text-dark-blue mb-8">Gerar Nova Proposta</h1>
-        <SubscriptionInfo />
+        <Dashboard />
+        <div className="mt-8">
+          <SubscriptionInfo />
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <ProposalForm 
             onSubmit={handleGenerateProposal} 

@@ -1,6 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
+import { proposalLimiter, apiLimiter, webhookLimiter } from './middleware/rateLimiter.js';
+import { validateProposalInput } from './middleware/validation.js';
+import { requestLogger, errorLogger } from './middleware/requestLogger.js';
+import logger from './config/logger.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
 import stripeRoutes from './routes/stripe.js';
@@ -12,7 +17,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Segurança com Helmet
+app.use(helmet());
+
+// CORS
 app.use(cors());
+
+// Request logging
+app.use(requestLogger);
+
+// Rate limiting geral para API
+app.use('/api', apiLimiter);
 
 // Webhook do Stripe precisa do raw body
 app.use('/api/webhook', express.raw({ type: 'application/json' }));
@@ -46,7 +61,7 @@ if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'placeholder_ke
   genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 }
 
-app.post('/api/gerar-lance', async (req, res) => {
+app.post('/api/gerar-lance', proposalLimiter, validateProposalInput, async (req, res) => {
   try {
     if (!genAI) {
       return res.status(500).json({ 
@@ -186,7 +201,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'LanceCerto API está funcionando' });
 });
 
+// Error logging middleware
+app.use(errorLogger);
+
 const server = app.listen(PORT, () => {
+  logger.info(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
 

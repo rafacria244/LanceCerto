@@ -6,19 +6,29 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "check-stripe": "node scripts/check-stripe-config.js"
+    "check-stripe": "node scripts/check-stripe-config.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",
     "@supabase/supabase-js": "^2.39.0",
     "cors": "^2.8.5",
+    "docx": "^8.5.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "stripe": "^14.9.0",
+    "express-rate-limit": "^8.2.1",
+    "express-validator": "^7.3.0",
+    "helmet": "^8.1.0",
     "pdfkit": "^0.15.0",
-    "docx": "^8.5.0"
+    "stripe": "^14.9.0",
+    "winston": "^3.18.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "@jest/globals": "^30.2.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.1.4"
   }
 }
